@@ -1,10 +1,13 @@
 const bodyParser = require('body-parser');
 const center = require('../models/Center')
 
+//FIND ALL CENTER
 exports.getAllCenter = async(req, res) =>{
     const centers = await center.find()
     res.json(centers)
 }
+
+//CREATE NEW CENTER
 exports.createNewCenter = async (req, res) => {
     const body = req.body;
     if (!body.name && !body.address && !body.capacity){
@@ -28,6 +31,7 @@ exports.createNewCenter = async (req, res) => {
 }
 }
 
+//FIND A SINGLE USER
 exports.getSingleCenter = async (req, res) => {
     const singleCenter = await center.findById(req.params.id);
     if (singleCenter) {
