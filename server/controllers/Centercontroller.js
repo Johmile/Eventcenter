@@ -43,3 +43,34 @@ exports.getSingleCenter = async (req, res) => {
         })
     }
 }
+
+//DELETE A CENTER
+exports.deleteSingleCenter = (req, res) => {
+    center.findByIdAndRemove(req.params.id, (err,center) => {
+        if(center){
+            res.json({
+                message:`You have successfully delete ${center}`
+            })
+        }
+        else {
+            res.json({
+                message:`Sorry,the ID does not exist `
+            })
+        }
+    })
+}
+//UPDATE A SINGLE CENTER
+exports.updateSingleCenter = (req, res) => {
+    center.findByIdAndUpdate(req.params.id, (err, center) =>{
+        if (center){
+            res.json({
+                message:`You have successfully updated ${center}`
+            })
+        }
+        else {
+            res.json({
+                message:`ID does not exist`
+            })
+        }
+    })
+}

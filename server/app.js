@@ -7,6 +7,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/', router)
 
+
+app.get('*', () => {
+    console.log(`<h1>404 ERROR,PAGE NOT FOUND </h1>`)
+})
 // port connection
 const port = 1000;
 app.listen(port, () => {
