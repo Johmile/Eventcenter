@@ -7,7 +7,7 @@ exports.getAllUser = async (req,res) => {
         res.json(allUser)
 }
 //POST A USER
-exports.postUser = async (req,res) => {
+exports.postUser = async (req, res) => {
     const body = req.body;
     if (!body.name && !body.email && !body.password){
         res.json({

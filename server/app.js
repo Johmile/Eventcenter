@@ -11,7 +11,7 @@ app.use('/', router);
 
 
 app.get('*', () => {
-    console.log(`<h1>404 ERROR,PAGE NOT FOUND </h1>`)
+    console.log(`404 ERROR,PAGE NOT FOUND`)
 })
 // port connection
 const port = 1000;

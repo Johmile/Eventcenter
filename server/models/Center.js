@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const centerSchema = new mongoose.Schema({
-    name:{type:String,require:true,unique:true},
+    name:{type:String,require:true},
     address:String,
     capacity:Number
 });
