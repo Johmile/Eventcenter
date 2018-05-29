@@ -2,7 +2,7 @@ const bodyParser = require('body-parser');
 const user = require('../models/User');
 
 //GET ALL USERS
-exports.getAllUser = async (req,res) => {
+exports.getAllUser = async (req, res) => {
     const allUser = await user.find()
         res.json(allUser)
 }
@@ -11,7 +11,12 @@ exports.postUser = async (req, res) => {
     const body = req.body;
     if (!body.name && !body.email && !body.password){
         res.json({
-            message:`Please fill all fields`
+            message:`Please fill all input fields`
+        })
+    }
+    else if (body.name.length > 20) {
+        res.json({
+            message:`Name is more than 20 characters`
         })
     }
     else{

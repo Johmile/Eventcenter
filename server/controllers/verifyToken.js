@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
                 })
             }
             else {
-                req.userId = decoded.id;
+                req.user = decoded;
                 next();
             }
         })
