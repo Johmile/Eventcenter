@@ -29,6 +29,11 @@ exports.encodePassword = async (req, res) => {
       message:`Password must be more than 7 characters`
     })
   }
+  // else if (!body.email.field){
+  //   res.json({
+  //     message:`check your email`
+  //   })
+  // }
   else {
     await user.create({
       name:body.name,
@@ -42,43 +47,11 @@ exports.encodePassword = async (req, res) => {
       token:token
     })
   }
-  // user.create({
-  //   name:body.name,
-  //   email:body.email,
-  //   password:hashpassword
-  // },
-  // (err, user) => {
-  //   if (err){
-  //     res.json(`An error occurs which causes a breakdown in connection`)
-  //   }
-  //   else if(!body.name && !body.email && !body.password){
-  //     res.json({
-  //       message:`Please fill in all required fields`
-  //     })
-  //   }
-  //   else if (body.name.length > 20){
-  //     res.json({
-  //       message:`Name must not be more than 20 characters `
-  //     })
-  //   }
-  //   else if (body.password < 8) {
-  //     res.json({
-  //       message:`Password must be more than 7 characters`
-  //     })
-  //   }
-  //   else {
-  //     const token = jwt.sign({id:user.id}, config.secret, {expiresIn:86400});
-  //     res.json({
-  //       message:`Registration was successful`,
-  //       auth:true,
-  //       token:token
-  //     })
-  //   }
-  // })
+ 
 }
 
 //Decoding the encoded token
-exports.decodePassword = async (req, res) => {
+exports.decodePassword = async (req, res, next) => {
   const token = req.headers['x-access-token'];
   if (!token){
     res.json({
@@ -87,38 +60,38 @@ exports.decodePassword = async (req, res) => {
     })
   }
   else { //VERIFY TOKEN AND RETURN USER WITH THE TOKEN
-   const verify = await jwt.verify(token, config.secret, (err, decoded) => {
-      if (err) {
-        res.json({
-          message:`Authenication failed`,
-          token:null
-        })
-      }
-      else {
-           user.findById(req.user, {password:0}, (err, user) => {
-              if (err) {
-                res.json({
-                  message:`Error decoding token`,
-                  auth:false,
-                  token:null
-                })
-              }
-              else if (!user) {
-                res.json({
-                  message:`No user found`
-                })
-              }
-              else {
-                res.json({
-                  message:`Decoding successful`,
-                  auth:true,
-                  user:user
-                })
-              }
-        })
-      }
-    })
-  }
+          await jwt.verify(token, config.secret, (err, decoded) => {
+            if (err) {
+              res.json({
+                message:`Authenication failed`,
+                token:null
+              })
+            }
+            else {
+                user.findById(req.userId, {password:0}, (err, user) => {
+                    if (err) {
+                      res.json({
+                        message:`Error decoding token`,
+                        auth:false,
+                        token:null
+                      })
+                    }
+                    else if (!user) {
+                      res.json({
+                        message:`No user found`
+                      })
+                    }
+                    else {
+                      res.json({
+                        message:`Decoding successful`,
+                        auth:true,
+                        user:user
+                      })
+                    }
+              })
+            }
+          })
+        }
     
 }
 

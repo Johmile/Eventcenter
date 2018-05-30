@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
     let token = req.headers['x-access-token'];
     if (!token) {
         res.json({
@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
                 })
             }
             else {
-                req.user = decoded;
+                req.userId = decoded.id;
                 next();
             }
         })
