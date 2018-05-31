@@ -34,7 +34,7 @@ exports.encodePassword = async (req, res, next) => {
       name:body.name,
       email:body.email,
       password:hashpassword,
-      date:body.date
+      date:body.date.now()
     })
     const token = jwt.sign({id:user.id}, config.secret, {expiresIn:86400})
     res.json({
@@ -120,7 +120,7 @@ exports.loginUser = async (req, res) => {
         })
       }
       else { // RETURN USER TOKEN
-          const token = jwt.sign({id:user.id}, config.secret, {expiresIn:86400})
+          const token = jwt.sign({id:user.id, email:user.email}, config.secret, {expiresIn:'2h'})
           res.json({
             message: `Login was successful`,
             auth:true,

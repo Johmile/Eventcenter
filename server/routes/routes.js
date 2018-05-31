@@ -18,16 +18,19 @@ router.post('/events', verifyToken, Eventcontroller.postNewEvent);
 router.get('/events/get', verifyToken, Eventcontroller.getAllEvent);
 router.get('/events/get/:id', verifyToken, Eventcontroller.getSingleEvent);
 router.delete('/events/delete/:id', verifyToken, Eventcontroller.deleteSingleEvent);
-router.put('/events/update/:id', Eventcontroller.updateSingleEvent)
+router.put('/events/update/:id', verifyToken, Eventcontroller.updateSingleEvent)
 
 //USER ROUTER
-router.get('/user/get', userController.getAllUser);
+router.get('/user/get', verifyToken, userController.getAllUser);
 router.post('/user', userController.postUser);
-router.get('/user/get/:id', userController.getSingleUser);
+router.get('/user/get/:id', verifyToken, userController.getSingleUser);
+router.put('/user/update/:id', verifyToken, userController.updateUser);
+router.delete('/user/delete/:id', verifyToken, userController.deleteUser)
+
 
 //AUTH ROUTES
 router.post('/register',authController.encodePassword);
-router.post('/login',verifyToken, authController.loginUser)
+router.post('/login', authController.loginUser)
 router.get('/gettokens', verifyToken, authController.decodePassword);
 
 module.exports = router;

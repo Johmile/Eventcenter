@@ -30,3 +30,19 @@ exports.getSingleUser = async (req, res) => {
     const singleUser = await findById(req.params.id)
         res.json(singleUser)
 }
+//DELETE A USER
+exports.deleteUser = async (req, res) => {
+    const removeUser = await user.remove(req.params.id)
+    res.json({
+        message:`You have succesfully remove selected user`,
+        user:removeUser
+    })
+}
+    //UPDATE USER
+    exports.updateUser = async (req, res) => {
+        const update = await user.update(req.params.id)
+        res.json({
+            message:`Update was successful`,
+            update:update
+        })
+    }
