@@ -11,10 +11,10 @@ const config = require('../config');
 const verifyToken = require('./verifyToken')
 
 //TO ENCODE PASSWORD OR HASH  PASSWORD, TO REGISTER A USER AND TO RETURN TOKEN
-exports.encodePassword = async (req, res) => {
+exports.encodePassword = async (req, res, next) => {
   const body = req.body;
   const hashpassword = bcrypt.hashSync(req.body.password);
-  if (!body.name && !body.email && !body.password) {
+  if (!body.name && !body.email && !body.password && !body.date) {
     res.json({
       message:`Please fill in all required input fields`
     })
@@ -29,16 +29,12 @@ exports.encodePassword = async (req, res) => {
       message:`Password must be more than 7 characters`
     })
   }
-  // else if (!body.email.field){
-  //   res.json({
-  //     message:`check your email`
-  //   })
-  // }
   else {
     await user.create({
       name:body.name,
       email:body.email,
-      password:hashpassword
+      password:hashpassword,
+      date:body.date
     })
     const token = jwt.sign({id:user.id}, config.secret, {expiresIn:86400})
     res.json({
@@ -68,7 +64,7 @@ exports.decodePassword = async (req, res, next) => {
               })
             }
             else {
-                user.findById(req.userId, {password:0}, (err, user) => {
+                user.findById(req.user, {password:0}, (err, user) => {
                     if (err) {
                       res.json({
                         message:`Error decoding token`,

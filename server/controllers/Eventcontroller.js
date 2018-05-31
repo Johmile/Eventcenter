@@ -1,14 +1,14 @@
 const bodyParser = require('body-parser');
 const Event = require('../models/Event');
-
+const verifyToken = require('./verifyToken')
 //GET ALL EVENTS
-exports.getAllEvent = async (req, res) => {
+exports.getAllEvent = async (req, res, next) => {
     const Events = await Event.find()
     res.json(Events)
 }
 
 // POST NEW EVENT
-exports.postNewEvent = async (req, res) => {
+exports.postNewEvent = async (req, res, next) => {
     const body = req.body;
     if (!body.type && !body.date && !body.time) {
         res.json({

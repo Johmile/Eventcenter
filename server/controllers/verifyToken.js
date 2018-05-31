@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+const user = require('../models/User');
 
 const verifyToken = async (req, res, next) => {
     let token = req.headers['x-access-token'];
@@ -20,7 +21,7 @@ const verifyToken = async (req, res, next) => {
                 })
             }
             else {
-                req.userId = decoded.id;
+                req.user = decoded.id;
                 next();
             }
         })

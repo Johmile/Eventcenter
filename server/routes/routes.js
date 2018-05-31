@@ -27,7 +27,7 @@ router.get('/user/get/:id', userController.getSingleUser);
 
 //AUTH ROUTES
 router.post('/register',authController.encodePassword);
-router.post('/login', authController.loginUser)
+router.post('/login',verifyToken, authController.loginUser)
 router.get('/gettokens', verifyToken, authController.decodePassword);
 
 module.exports = router;
