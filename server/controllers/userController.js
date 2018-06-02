@@ -27,12 +27,12 @@ exports.postUser = async (req, res) => {
 
 //GET A SINGLE USER
 exports.getSingleUser = async (req, res) => {
-    const singleUser = await findById(req.params.id)
+    const singleUser = await user.findById(req.params.id)
         res.json(singleUser)
 }
 //DELETE A USER
 exports.deleteUser = async (req, res) => {
-    const removeUser = await user.remove(req.params.id)
+    const removeUser = await user.findByIdAndRemove(req.params.id)
     res.json({
         message:`You have succesfully remove selected user`,
         user:removeUser
@@ -40,7 +40,7 @@ exports.deleteUser = async (req, res) => {
 }
     //UPDATE USER
     exports.updateUser = async (req, res) => {
-        const update = await user.update(req.params.id)
+        const update = await user.findByIdAndUpdate(req.params.id)
         res.json({
             message:`Update was successful`,
             update:update

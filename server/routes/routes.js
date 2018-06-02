@@ -15,7 +15,7 @@ router.delete('centers/delete/:id', verifyToken, Centercontroller.deleteSingleCe
 
 //EVENT ROUTER
 router.post('/events', verifyToken, Eventcontroller.postNewEvent);
-router.get('/events/get', verifyToken, Eventcontroller.getAllEvent);
+router.get('/events/get', Eventcontroller.getAllEvent);
 router.get('/events/get/:id', verifyToken, Eventcontroller.getSingleEvent);
 router.delete('/events/delete/:id', verifyToken, Eventcontroller.deleteSingleEvent);
 router.put('/events/update/:id', verifyToken, Eventcontroller.updateSingleEvent)
