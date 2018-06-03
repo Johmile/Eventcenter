@@ -33,4 +33,8 @@ router.post('/register',authController.encodePassword);
 router.post('/login', authController.loginUser)
 router.get('/gettokens', verifyToken, authController.decodePassword);
 
+//FORGOT PASSWORD ROUTES
+router.post('/forgot', authController.forgotPassword)
+//router.post('/reset/:token', authController.updatePassword)
+
 module.exports = router;

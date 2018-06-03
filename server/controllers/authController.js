@@ -3,6 +3,9 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer')
+const async = require('async')
+const crypto = require('crypto')
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -34,7 +37,7 @@ exports.encodePassword = async (req, res, next) => {
       name:body.name,
       email:body.email,
       password:hashpassword,
-      date:body.date.now()
+      date:body.date
     })
     const token = jwt.sign({id:user.id}, config.secret, {expiresIn:86400})
     res.json({
@@ -120,7 +123,7 @@ exports.loginUser = async (req, res) => {
         })
       }
       else { // RETURN USER TOKEN
-          const token = jwt.sign({id:user.id, email:user.email}, config.secret, {expiresIn:'2h'})
+          const token = jwt.sign({id:user.id, email:user.email}, config.secret, {expiresIn:'1h'})
           res.json({
             message: `Login was successful`,
             auth:true,
@@ -133,3 +136,158 @@ exports.loginUser = async (req, res) => {
   }
 }
 
+
+// RESET PASSWORD
+exports.resetPassword = (req, res) => {
+  async.waterfall([
+    () => {
+      user.findOne({resetpasswordtoken:req.params.token, expiresIn:'1h'}, (err, user) => {
+        if(!user) {
+          res.json(`The reset password token is invalid or has expired`)
+        }
+        if (req.body.password === req.body.confirm) {
+          user.setPassword(req.body.password, (err) => {
+            user.resetpasswordtoken = undefined
+          })
+        }
+        else {
+          res.json({
+            alert:`Error`,
+            message:`passwords do not match, try again`
+          })
+        }
+      })
+    },
+    (user) => {
+      const admin = nodemailer.createTransport({
+        service:`Gmail`,
+        auth:{
+          username:`otitojuoluwapelumi@gmail.com`,
+          password:process.env.GMAILPW
+        }
+      });
+      const recipient = {
+        from:`otitojuoluwapelumi@gmail.com`,
+        to:user.email,
+        subject:`Event password recovery`,
+        text:`Your password has been successfully recovered and has been set to ${req.body.confirm}`
+      }
+      admin.sendMail(recipient, (err, success) => {
+        if (err) {
+          res.json(`Sending failed`)
+        }
+        else {
+          res.json({
+            message:`An email has been sent to ${user.email} with login details`
+          })
+        }
+      })
+    }
+  ])
+}
+//GET RESET
+exports.getResetPassword = (req, res) => {
+  user.findOne({resetpasswordtoken:req.params.token, expiresIn:'1h'}, (err, user) => {
+    if (!user) {
+      res.json(`Token does not exist or has expires, please start again`)
+    }
+    else {
+      res.json(`You will redirect shortly`)
+    }
+  })
+}
+//USING UPDATE HAS RESET PASSWORD
+exports.updatePassword = (req, res) => {
+  async.waterfall([
+    (done) => { //function that finds user token 
+    user.findOne({resetpasswordtoken:req.params.token, expiresIn:'1h'}, (err, user) => {
+    if (!user) {
+      res.json(`Token is invalid or has expired, try again next time`)
+    }
+    if (req.body.password === req.body.confirm) {
+      user.update(req.body.password, (err) => {
+        user.resetpasswordtoken = undefined
+        res.json(`Password has been changed successfully`)
+        user.save( () =>{
+          done(err, user)
+        })
+        
+      })
+    }
+    else {
+      res.json(`Passwords do not match`)
+    }
+  })
+},
+  (user) => { //function that create email
+    const admin = nodemailer.createTransport({
+      service:`Gmail`,
+      auth:{
+        username:`otitojuoluwapelumi@gmail.com`,
+        password:process.env.GMAILPW
+      }
+    });
+    const recipient = {
+      from:`otitojuoluwapelumi@gmail.com`,
+      to:user.email,
+      subject:`password recovery`,
+      text:`password has been changed to user.password`
+    }
+    admin.sendMail(recipient, (err, success) => {
+      if (err) {
+        res.json(`Mail not sent`)
+      }
+      else {
+        res.json(`Mail was succesfully sent`)
+      }
+    })
+  }
+]),
+    (err) => {
+      if(err) next(err)
+      } }
+
+
+
+//ALTERNATIVE TO FORGOTPASSWORD
+exports.forgotPassword = (req, res) => {
+  user.findOne({email:req.body.email}, (err, user) => {
+    if (!user) {
+      res.json(`No user with this email`)
+    }
+    else {
+      crypto.randomBytes(20, (err, buffer) => {
+        const token = buffer.toString('hex')
+        user.resetpasswordtoken = token
+        user.save();
+      })
+        // send mail
+        const admin = nodemailer.createTransport({
+          service:'Gmail',
+          auth:{
+            username:'otitojuoluwapelumi@gmail.com',
+            password:process.env.GMAILPW
+          }
+        })
+        const recipient = {
+          from:'otitojuoluwapelumi@gmail.com',
+          to:user.email,
+          subject:'testing',
+          text:`You have successfully requested for password reset, follow this 
+                   link http://localhost:1000/reset/:token and reset your password` 
+        }
+        admin.sendMail(recipient, (err) => {
+          if (err){
+            res.json({
+              error:err,
+              
+            })
+          }
+          else{
+            res.json(`mail sent`)
+          }
+        })
+      
+    }
+  })
+}
