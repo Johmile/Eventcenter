@@ -18,12 +18,14 @@
   },
   "homepage": "https://github.com/otitoju/Eventcenter#readme",
   "dependencies": {
+    "async": "^2.6.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.1",
     "mongoose": "^5.1.2",
-    "mongoose-type-email": "^1.0.9"
+    "mongoose-type-email": "^1.0.9",
+    "node-mailer": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.17.5"

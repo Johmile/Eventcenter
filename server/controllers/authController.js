@@ -18,7 +18,7 @@ exports.encodePassword = async (req, res) => {
   //console.log('hello')
   const body = req.body;
   const hashpassword = bcrypt.hashSync(req.body.password);
-  if (!body.name && !body.email && !body.password && !body.date) {
+  if (body.name != '' && body.email != '' && body.password != '' && body.date != '') {
     res.json({
       message:`Please fill in all required input fields`
     })
@@ -269,7 +269,7 @@ exports.forgotPassword = (req, res) => {
           service:'Gmail',
           auth: {
             user:'otitojuoluwapelumi@gmail.com',
-            pass:'sci15csc067'
+            pass:process.env.GMAILPW
           }
         })
         var mailOptions = {
@@ -351,7 +351,7 @@ exports.reportProblem = (req, res) => {
     service:'Gmail',
     auth: {
       user:'otitojuoluwapelumi@gmail.com',
-      pass:'sci15csc067'
+      pass:process.env.GMAILPW
     }
   })
   var mailOptions = {
