@@ -29,12 +29,14 @@ router.delete('/user/delete/:id', verifyToken, userController.deleteUser)
 
 
 //AUTH ROUTES
-router.post('/register',authController.encodePassword);
+router.post('/registers', authController.encodePassword);
 router.post('/login', authController.loginUser)
 router.get('/gettokens', verifyToken, authController.decodePassword);
 
 //FORGOT PASSWORD ROUTES
 router.post('/forgot', authController.forgotPassword)
-//router.post('/reset/:token', authController.updatePassword)
+//router.post('/reset', authController.updatePassword)
+router.post('/reset/:token', authController.resetPassword)
+router.post('/message', authController.reportProblem)
 
 module.exports = router;
