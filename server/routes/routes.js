@@ -5,6 +5,7 @@ const Eventcontroller = require('../controllers/Eventcontroller');
 const userController = require('../controllers/userController')
 const authController = require('../controllers/authController')
 const verifyToken = require('../controllers/verifyToken')
+const admincontroller = require('../controllers/admincontroller')
 //CENTER ROUTER
 router.post('/centers', verifyToken, Centercontroller.createNewCenter);
 router.get('/centers/get', verifyToken, Centercontroller.getAllCenter);
@@ -21,7 +22,7 @@ router.delete('/events/delete/:id', verifyToken, Eventcontroller.deleteSingleEve
 router.put('/events/update/:id', verifyToken, Eventcontroller.updateSingleEvent)
 
 //USER ROUTER
-router.get('/user/get', verifyToken, userController.getAllUser);
+router.get('/user/get', userController.getAllUser);
 router.post('/user', userController.postUser);
 router.get('/user/get/:id', verifyToken, userController.getSingleUser);
 router.put('/user/update/:id', verifyToken, userController.updateUser);
@@ -36,7 +37,10 @@ router.get('/gettokens', verifyToken, authController.decodePassword);
 //FORGOT PASSWORD ROUTES
 router.post('/forgot', authController.forgotPassword)
 //router.post('/reset', authController.updatePassword)
-router.post('/reset/:token', authController.resetPassword)
+router.put('/reset/:email', authController.resetPassword)
 router.post('/message', authController.reportProblem)
+
+router.post('/admin', admincontroller.createSuperUser)
+router.post('/admin/login', admincontroller.loginAdmin)
 
 module.exports = router;

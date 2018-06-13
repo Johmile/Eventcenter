@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
     email: {type:email, required: true, unique:true},
     password: String,
     resetpasswordtoken: String,
-    date: Date
+    date: Date,
+    resetexpires:Date
+    //admin: {type:boolean, default: false}
 });
 module.exports = mongoose.model('user', userSchema);

@@ -1,5 +1,7 @@
 const bodyParser = require('body-parser');
+const bcrypt = require('bcryptjs')
 const user = require('../models/User');
+
 
 //GET ALL USERS
 exports.getAllUser = async (req, res) => {
@@ -39,10 +41,18 @@ exports.deleteUser = async (req, res) => {
     })
 }
     //UPDATE USER
-    exports.updateUser = async (req, res) => {
-        const update = await user.findByIdAndUpdate(req.params.id)
-        res.json({
-            message:`Update was successful`,
-            update:update
+    exports.updateUser = (req, res) => {
+        const hash = bcrypt.hashSync(req.body.password,10)
+        user.findByIdAndUpdate(req.body.id, req.body,{new:true}, (err, user)=>{
+            if(err){
+                res.status(500).json('There is a problem updating user')
+            }
+            else{
+                user.password = hash
+                res.status(200).json({
+                    message:'Updated',
+                    user:user
+                })
+            }
         })
     }
