@@ -6,6 +6,14 @@ const userController = require('../controllers/userController')
 const authController = require('../controllers/authController')
 const verifyToken = require('../controllers/verifyToken')
 const admincontroller = require('../controllers/admincontroller')
+const pic = require('../models/pic')
+
+
+const user = require('../models/User')
+const multer = require('multer')
+const path = require('path')
+const bcrypt = require('bcryptjs')
+
 //CENTER ROUTER
 router.post('/centers', verifyToken, Centercontroller.createNewCenter);
 router.get('/centers/get', verifyToken, Centercontroller.getAllCenter);
@@ -23,16 +31,16 @@ router.put('/events/update/:id', verifyToken, Eventcontroller.updateSingleEvent)
 
 //USER ROUTER
 router.get('/user/get', userController.getAllUser);
-router.post('/user', userController.postUser);
+
 router.get('/user/get/:id', verifyToken, userController.getSingleUser);
 router.put('/user/update/:id', verifyToken, userController.updateUser);
 router.delete('/user/delete/:id', verifyToken, userController.deleteUser)
 
 
 //AUTH ROUTES
-router.post('/registers', authController.encodePassword);
+router.post('/register', authController.encodePassword);
 router.post('/login', authController.loginUser)
-router.get('/gettokens', verifyToken, authController.decodePassword);
+router.get('/gettokens',  authController.decodePassword);
 
 //FORGOT PASSWORD ROUTES
 router.post('/forgot', authController.forgotPassword)
@@ -40,7 +48,64 @@ router.post('/forgot', authController.forgotPassword)
 router.put('/reset/:email', authController.resetPassword)
 router.post('/message', authController.reportProblem)
 
+//Admin routes
 router.post('/admin', admincontroller.createSuperUser)
 router.post('/admin/login', admincontroller.loginAdmin)
+router.get('/admin', admincontroller.getAllAdmin)
+router.delete('/admin/:id', admincontroller.deleteAdmin)
+router.put('/admin/:id', admincontroller.updateProfile)
+
+//router.post('/upload', userController.uploadImages)
+router.post('/search', userController.searchUser)
+
+
+const storage = multer.diskStorage({
+    destination:'../images/',
+    filename:(req, file, cb)=>{
+        cb(null, file.fieldname +  Date.now() + path.extname(file.originalname))
+    }
+})
+const upload = multer({
+    storage:storage,
+    limits:{fileSize:1000000},
+    fileFilter:(req, file, cb) => {
+        checkFileType(file, cb)
+    }
+})
+const checkFileType = (file, cb)=>{
+    //file type
+    const fileType = /jpeg|jpg|png/
+    //file extension
+    const extname = fileType.test(path.extname(file.originalname).toLowerCase)
+    //mimetype
+    const mime = fileType.test(file.mimetype)
+    if (mime || extname){
+        return cb(null, true)
+    }
+    else{
+        cb('Error: Images only')
+    }
+}
+
+router.post('/upload',upload.single('pic') ,(req, res) =>{
+    if (!req.file){
+        res.json({message:`Error: No file selected`})
+    }   
+    else{
+        pic.create({
+        
+            pic:req.file.path,
+            
+        },(err,user)=>{
+            if(err){
+                res.json({message:err})
+            }
+            else{
+                res.json({message:user})
+            }
+        })
+    } 
+
+});
 
 module.exports = router;

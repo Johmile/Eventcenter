@@ -17,8 +17,8 @@ const verifyToken = require('./verifyToken')
 exports.encodePassword = async (req, res) => {
   //console.log('hello')
   const body = req.body;
-  const hashpassword = bcrypt.hashSync(req.body.password);
-  if (body.name != '' && body.email != '' && body.password != '' && body.date != '') {
+  const hashpassword = bcrypt.hashSync(req.body.password,10);
+  if (!body.name || !body.email  || !body.password ||!body.secret) {
     res.json({
       message:`Please fill in all required input fields`
     })
@@ -38,7 +38,8 @@ exports.encodePassword = async (req, res) => {
       name:body.name,
       email:body.email,
       password:hashpassword,
-      date:body.date
+      date:body.date,
+      secret:body.secret
     })
     const token = jwt.sign({id:user.id}, config.secret, {expiresIn:'1h'})
     res.json({
@@ -68,7 +69,7 @@ exports.decodePassword = async (req, res, next) => {
               })
             }
             else {
-                user.findById(req.user, {password:0}, (err, user) => {
+                user.findById(decoded.id, {password:0}, (err, user) => {
                     if (err) {
                       res.json({
                         message:`Error decoding token`,
@@ -97,7 +98,7 @@ exports.decodePassword = async (req, res, next) => {
 
 // LOGIN  EXISTED USER
 exports.loginUser = async (req, res) => {
-  if(!req.body.email && !req.body.password) {
+  if(req.body.email == '' || req.body.password == '') {
     res.json({
       message:`Please fill in required input field`
     })
@@ -108,10 +109,10 @@ exports.loginUser = async (req, res) => {
       res.json({
         message:`Unable to complete task`
       })
-    }
+    }  
     else if (!user) {
       res.json({
-        message:`No user found`
+        message:`Wrong or invalid email address`
       })
     }
     else{
@@ -125,6 +126,7 @@ exports.loginUser = async (req, res) => {
       }
       else { // RETURN USER TOKEN
           const token = jwt.sign({id:user.id, email:user.email}, config.secret, {expiresIn:'1h'})
+  
           res.json({
             message: `Login was successful`,
             auth:true,
@@ -171,28 +173,36 @@ exports.forgotPassword = (req, res) => {
       res.status(401).json(`No user with such email address`)
     }
     else {
-      var transport = nodemailer.createTransport({
-        service:'Gmail',
-        auth:{
-          user:'otitojuoluwapelumi@gmail.com',
-          pass:process.env.GMAILPW
+      if(req.body.secret === user.secret){
+        var transport = nodemailer.createTransport({
+          service:'Gmail',
+          auth:{
+            user:'otitojuoluwapelumi@gmail.com',
+            pass:process.env.GMAILPW
+          }
+        })
+        var mailOptions = {
+          from:'otitojuoluwapelumi@gmail.com',
+          to:req.body.email,
+          subject:'password recovery',
+          html:'<p>you have requested for password reset</p>with Email:'+req.body.email+
+          'kindly follow this link to change your password http://'+req.headers.host+'/reset/'+req.body.email
         }
-      })
-      var mailOptions = {
-        from:'otitojuoluwapelumi@gmail.com',
-        to:req.body.email,
-        subject:'password recovery',
-        html:'<p>you have requested for password reset</p>with Email:'+req.body.email+
-        'kindly follow this link to change your password http://'+req.headers.host+'/reset/'+req.body.email
+        transport.sendMail(mailOptions, (err) => {
+          if (err){
+            res.json('mail not sent')
+          }
+          else {
+            res.json('mail sent')
+          }
+        })
       }
-      transport.sendMail(mailOptions, (err) => {
-        if (err){
-          res.json('mail not sent')
-        }
-        else {
-          res.json('mail sent')
-        }
-      })
+      else{
+        res.json({
+          message:`You are trying to trespass`
+        })
+      }
+      
     }
   })  
 }     
@@ -204,7 +214,7 @@ exports.resetPassword = (req, res) => {
       res.json('No user with such email')
     }
     else{
-      if (req.body.password === req.body.confirm){
+      if (req.body.password === req.body.confirm && req.body.secret === user.secret){
         user.password = hashpassword
         user.save()
         
@@ -231,7 +241,7 @@ exports.resetPassword = (req, res) => {
         })
       }
       else {
-        res.json('passwords do not match')
+        res.json('passwords do not match or wrong user secret')
       }
       
     }
