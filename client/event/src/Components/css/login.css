@@ -1,0 +1,25 @@
+#login{
+    width: 400px;
+    height: 420px;
+    margin: 0 auto;
+    margin-top: 40px;
+    border-radius: 3%
+}
+.jumbotron .form-group #password, #email {
+border:none;
+border-bottom: 1px solid rgb(92, 40, 40);
+/* background:transparent; */
+/* outline: none; */
+height: 40px;
+color:black;
+font-size: 16px;
+}
+label{
+    margin:0;
+    padding: 0;
+    font-weight: bold;
+    float: left;
+}
+h1{
+    color: black;
+}

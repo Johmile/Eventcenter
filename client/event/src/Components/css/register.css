@@ -1,0 +1,35 @@
+#register{
+    width: 420px;
+    height: 520px;
+    margin: 0 auto;
+    margin-top: 40px;
+    border-radius: 3%
+}
+.jumbotron .form-group #name, #password, #email {
+border:none;
+border-bottom: 1px solid rgb(92, 40, 40);
+/* background:transparent; */
+/* outline: none; */
+height: 40px;
+color:black;
+font-size: 16px;
+}
+.jumbotron .form-group #secret {
+border:none;
+border-bottom: 1px solid rgb(92, 40, 40);
+/* background:transparent;
+outline: none; */
+height: 40px;
+color:black;
+font-size: 16px;
+}
+label{
+    margin:0;
+    padding: 0;
+    font-weight: bold;
+    float: left;
+}
+.reg{
+    width:100%;
+    padding:0
+}

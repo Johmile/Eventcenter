@@ -1,0 +1,19 @@
+body{
+    margin: 0;
+    
+}
+h1{
+    color: white;
+    font-size: 50px
+}
+#dashboard{
+    margin-top:250px;
+    
+    
+}
+#contain{
+    background-image: url('stars.jpg');
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
