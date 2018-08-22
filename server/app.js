@@ -7,14 +7,15 @@ const router = require('./routes/routes')
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/', router);
-app.use('/images',express.static('images'))
+app.use('/images',express.static('./images'))
 // var AuthController = require('./auth/AuthController');
 // app.use('/api/auth', AuthController);
 
 
-// app.get('*', () => {
-//     console.log(`404 ERROR,PAGE NOT FOUND`)
-// })
+app.get('*', (req, res) => {
+    res.send(`<h1>404 ERRor, page not found</h1>`)
+    console.log(`404 ERROR,PAGE NOT FOUND`)
+})
 // port connection
 const port = 1000;
 app.listen(port, () => {

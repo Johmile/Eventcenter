@@ -15,10 +15,11 @@ const path = require('path')
 const bcrypt = require('bcryptjs')
 
 //CENTER ROUTER
-router.post('/centers', verifyToken, Centercontroller.createNewCenter);
-router.get('/centers/get', verifyToken, Centercontroller.getAllCenter);
-router.get('/centers/get/:id', verifyToken, Centercontroller.getSingleCenter);
-router.delete('centers/delete/:id', verifyToken, Centercontroller.deleteSingleCenter);
+router.post('/centers',  Centercontroller.createNewCenter);
+router.get('/centers/get',  Centercontroller.getAllCenter);
+router.get('/centers/get/:id',  Centercontroller.getSingleCenter);
+router.delete('centers/delete/:id',  Centercontroller.deleteSingleCenter);
+router.put('/available/:id', Centercontroller.updateSingleCenter)
 
 
 
@@ -59,53 +60,84 @@ router.put('/admin/:id', admincontroller.updateProfile)
 router.post('/search', userController.searchUser)
 
 
+// const storage = multer.diskStorage({
+//     destination:(req, file, cb)=>{
+//         cb(null, './uploads/')
+//     },
+//     filename:(req, file, cb)=>{
+//         // cb(null, new Date().toISOString()+ file.fieldname+ file.originalname)
+//         cb(null, file.fieldname +  Date.now() + path.extname(file.originalname))
+//     }
+// })
+// const upload = multer({
+//     storage:storage,
+//     limits:{fileSize:1000000},
+//     fileFilter:(req, file, cb) => {
+//         checkFileType(file, cb)
+//     }
+// })
+// const checkFileType = (file, cb)=>{
+//     //file type
+//     const fileType = /jpeg|jpg|png/
+//     //file extension
+//     const extname = fileType.test(path.extname(file.originalname).toLowerCase)
+//     //mimetype
+//     const mime = fileType.test(file.mimetype)
+//     if (mime || extname){
+//         return cb(null, true)
+//     }
+//     else{
+//         cb('Error: Images only')
+//     }
+// }
+
+// router.post('/upload',upload.single('pic') ,(req, res) =>{
+//    // console.log(req.file)
+//     if (!req.file){
+//         res.json({message:`Error: No file selected`})
+//     }   
+//     else{
+//         pic.create({
+        
+//             pic:req.file.path,
+            
+//         },(err,user)=>{
+//             if(err){
+//                 res.json({message:err})
+//             }
+//             else{
+//                 res.json({message:user})
+//             }
+//         })
+//     } 
+
+// });
+// router.get('/img', async(req, res)=> {
+//     const picture =await pic.find()
+//     res.json(picture)
+// })
+//Using cloudinary
 const storage = multer.diskStorage({
-    destination:'../images/',
-    filename:(req, file, cb)=>{
-        cb(null, file.fieldname +  Date.now() + path.extname(file.originalname))
+    filename:function(req, file, cb){
+        cb(null, Date.now()+file.originalname)
     }
 })
-const upload = multer({
-    storage:storage,
-    limits:{fileSize:1000000},
-    fileFilter:(req, file, cb) => {
-        checkFileType(file, cb)
-    }
-})
-const checkFileType = (file, cb)=>{
-    //file type
-    const fileType = /jpeg|jpg|png/
-    //file extension
-    const extname = fileType.test(path.extname(file.originalname).toLowerCase)
-    //mimetype
-    const mime = fileType.test(file.mimetype)
-    if (mime || extname){
-        return cb(null, true)
+const imageFilter = function(req, file, cb){
+    if(!file.originalname.match(/\.(jpeg|jpg|png)$/i)){
+        return cb(new Error('Only image files are allowed'), false)
     }
     else{
-        cb('Error: Images only')
+        cb(null,true)
     }
 }
-
-router.post('/upload',upload.single('pic') ,(req, res) =>{
-    if (!req.file){
-        res.json({message:`Error: No file selected`})
-    }   
-    else{
-        pic.create({
-        
-            pic:req.file.path,
-            
-        },(err,user)=>{
-            if(err){
-                res.json({message:err})
-            }
-            else{
-                res.json({message:user})
-            }
-        })
-    } 
-
-});
-
+var upload = multer({
+    storage:storage,
+    fileFilter:imageFilter
+})
+var cloudinary = require('cloudinary')
+cloudinary.config({
+    cloud_name:'otitoju',
+    api_key:process.env.CLOUDINARY_API_KEY,
+    api_secret:process.env.CLOUDINARY_API_SECRET
+})
 module.exports = router;

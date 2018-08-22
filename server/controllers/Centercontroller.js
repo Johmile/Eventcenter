@@ -4,39 +4,38 @@ const center = require("../models/Center");
 //FIND ALL CENTER
 exports.getAllCenter = async (req, res) => {
   const centers = await center.find();
-  res.json(centers);
+  // if(centers.available == false){
+  //   res.json({message:`No available center`})
+  // }
+  res.json({info:centers});
 };
 
 //CREATE NEW CENTER
 exports.createNewCenter = async (req, res) => {
   const body = req.body;
-  if (!body.name && !body.address && !body.capacity) {
+  if (!body.name || !body.address || !body.capacity) {
     res.json({
       message: `Please fill in the required inputs`
     });
-  } else if (body.name.length > 35 && body.address.length > 35) {
+  } else if (body.name.length > 35 || body.address.length > 35) {
     res.json({
       message: `Name or Address is too long`
     });
   } else {
     const newCenter = await center.create(req.body);
-    // name:body.name,
-    // address:body.address,
-    // capacity:body.capacity
-
-    res.json(newCenter);
+    res.json({info:newCenter});
   }
 };
 
 //FIND A SINGLE USER
 exports.getSingleCenter = async (req, res) => {
   const singleCenter = await center.findById(req.params.id);
-  if (singleCenter) {
-    res.json(singleCenter);
-  } else {
-    res.json({
-      message: `Sorry, center does not exist`
-    });
+  const available = await singleCenter.available
+  if(available){
+    res.json({info:singleCenter})
+  }
+  else{
+    res.json({message:`Center is not available for booking now`})
   }
 };
 
@@ -56,10 +55,10 @@ exports.deleteSingleCenter = (req, res) => {
 };
 //UPDATE A SINGLE CENTER
 exports.updateSingleCenter = (req, res) => {
-  center.findByIdAndUpdate(req.params.id, (err, center) => {
+  center.findByIdAndUpdate(req.params.id, {available:req.body.available}, {new:true}, (err, center) => {
     if (center) {
       res.json({
-        message: `You have successfully updated ${center}`
+        message: `status changed successfully`
       });
     } else {
       res.json({
