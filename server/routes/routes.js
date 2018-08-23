@@ -24,9 +24,9 @@ router.put('/available/:id', Centercontroller.updateSingleCenter)
 
 
 //EVENT ROUTER
-router.post('/events', verifyToken, Eventcontroller.postNewEvent);
+router.post('/events',  Eventcontroller.postNewEvent);
 router.get('/events/get', Eventcontroller.getAllEvent);
-router.get('/events/get/:id', verifyToken, Eventcontroller.getSingleEvent);
+router.get('/events/get/:id',  Eventcontroller.getSingleEvent);
 router.delete('/events/delete/:id', verifyToken, Eventcontroller.deleteSingleEvent);
 router.put('/events/update/:id', verifyToken, Eventcontroller.updateSingleEvent)
 

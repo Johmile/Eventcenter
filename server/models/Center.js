@@ -4,10 +4,16 @@ const centerSchema = new mongoose.Schema({
     name:{type:String},
     address:String,
     capacity:Number,
-    date:{type:String},
+    date:{type:Date},
     expires:Date,
     available:{type:Boolean, default: true},
-    price:String
+    price:String,
+    description:String,
+    terms:String,
+    contact:Number,
+    location:String,
+    lat:Number,
+    lng:Number
 },{
     timestamps:true
 });

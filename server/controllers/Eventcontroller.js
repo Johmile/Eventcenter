@@ -4,20 +4,25 @@ const verifyToken = require('./verifyToken')
 //GET ALL EVENTS
 exports.getAllEvent = async (req, res, next) => {
     const Events = await Event.find()
-    res.json(Events)
+    const totalEvents = await Events.length
+    res.json({info:Events, total:totalEvents})
 }
 
 // POST NEW EVENT
 exports.postNewEvent = async (req, res, next) => {
     const body = req.body;
-    if (!body.type && !body.date && !body.time) {
+    if (!body.type || !body.date || !body.time) {
         res.json({
             message:'Please fill in the required inputs'
         })
     }
     else{
         const newEvent = await Event.create(req.body)
-        res.json(newEvent)
+        let event = await newEvent.date
+        if(event < Date.now()){
+            res.json({message:`Invalid event date`})
+        }
+        res.json({info:newEvent})
     }
 }
 

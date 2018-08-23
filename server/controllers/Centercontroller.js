@@ -1,6 +1,14 @@
 const bodyParser = require("body-parser");
 const center = require("../models/Center");
+const NodeGeocoder = require('node-geocoder');
 
+const options = {
+  provider:'google',
+  httpAdapter:'https',
+  apiKey:process.env.GEOCODER_API_KEY,
+  formatter:null
+}
+const geocoder = NodeGeocoder(options)
 //FIND ALL CENTER
 exports.getAllCenter = async (req, res) => {
   const centers = await center.find();
@@ -22,7 +30,28 @@ exports.createNewCenter = async (req, res) => {
       message: `Name or Address is too long`
     });
   } else {
-    const newCenter = await center.create(req.body);
+    geocoder.geocode(req.body.location, (err, data) => {
+      if(err || !data.length){
+        res.json({
+          message:`invalid address`
+        })
+      }
+      var lat = data[0].latitude
+      var lng = data[0].longitude
+      var location = data[0].formattedAddress
+    })
+    const newCenter = await center.create({
+      name:body.name,
+      address:body.address,
+      capacity:body.capacity,
+      price:body.price,
+      description:body.description,
+      terms:body.terms,
+      contact:body.contact,
+      location:location,
+      lat:lat,
+      lng:lng
+    });
     res.json({info:newCenter});
   }
 };
@@ -31,6 +60,8 @@ exports.createNewCenter = async (req, res) => {
 exports.getSingleCenter = async (req, res) => {
   const singleCenter = await center.findById(req.params.id);
   const available = await singleCenter.available
+  let valid_date = await Date.now() + 259200000
+  singleCenter.expires = valid_date
   if(available){
     res.json({info:singleCenter})
   }
