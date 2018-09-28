@@ -30,33 +30,38 @@ exports.createNewCenter = async (req, res) => {
       message: `Name or Address is too long`
     });
   } else {
-    geocoder.geocode(req.body.location, (err, data) => {
-      if(err || !data.length){
-        res.json({
-          message:`invalid address`
-        })
-      }
-      var lat = data[0].latitude
-      var lng = data[0].longitude
-      var location = data[0].formattedAddress
-    })
-    const newCenter = await center.create({
-      name:body.name,
-      address:body.address,
-      capacity:body.capacity,
-      price:body.price,
-      description:body.description,
-      terms:body.terms,
-      contact:body.contact,
-      location:location,
-      lat:lat,
-      lng:lng
-    });
+    // geocoder.geocode(req.body.location, (err, data) => {
+    //   if(err || !data.length){
+    //     res.json({
+    //       message:`invalid address`
+    //     })
+    //   }
+    //   var lat = data[0].latitude
+    //   var lng = data[0].longitude
+    //   var location = data[0].formattedAddress
+    // })
+    const newCenter = await center.create(req.body)
+    // newCenter.location = location
+    // newCenter.lat = lat
+    // newCenter.lng = lng
+    // await newCenter.save()
+    // const newCenter = await center.create({
+    //   name:body.name,
+    //   address:body.address,
+    //   capacity:body.capacity,
+    //   price:body.price,
+    //   description:body.description,
+    //   terms:body.terms,
+    //   contact:body.contact,
+    //   location:location,
+    //   lat:lat,
+    //   lng:lng
+    // });
     res.json({info:newCenter});
   }
 };
 
-//FIND A SINGLE USER
+//FIND A SINGLE CENTER
 exports.getSingleCenter = async (req, res) => {
   const singleCenter = await center.findById(req.params.id);
   const available = await singleCenter.available
@@ -66,7 +71,9 @@ exports.getSingleCenter = async (req, res) => {
     res.json({info:singleCenter})
   }
   else{
-    res.json({message:`Center is not available for booking now`})
+      res.json({messsage:`Center is not available for booking now`, info:singleCenter})
+    
+    
   }
 };
 
@@ -85,16 +92,25 @@ exports.deleteSingleCenter = (req, res) => {
   });
 };
 //UPDATE A SINGLE CENTER
-exports.updateSingleCenter = (req, res) => {
-  center.findByIdAndUpdate(req.params.id, {available:req.body.available}, {new:true}, (err, center) => {
-    if (center) {
-      res.json({
-        message: `status changed successfully`
-      });
-    } else {
-      res.json({
-        message: `ID does not exist`
-      });
+exports.updateSingleCenter = async (req, res) => {
+    const info = await center.findOne({id: req.params.id})
+    if(!info){
+      res.json({message:`This center is invalid`})
     }
-  });
+    else{
+      info.available = req.body.available || info.available
+      await info.save()
+      res.json({message:'you have successffully booked center'})
+    }
+  // center.findByIdAndUpdate(req.params.id, {available:req.body.available}, {new:true}, (err, center) => {
+  //   if (center) {
+  //     res.json({
+  //       message: `status changed successfully`
+  //     });
+  //   } else {
+  //     res.json({
+  //       message: `ID does not exist`
+  //     });
+  //   }
+  // });
 };

@@ -29,8 +29,9 @@ exports.postNewEvent = async (req, res, next) => {
 //GET A SINGLE EVENT
 exports.getSingleEvent = async (req, res) => {
     const singleEvent = await Event.findById(req.params.id)
-    res.json(singleEvent)
+    res.json({message: singleEvent})
 }
+
 
 //DELETE AN EVENT
 exports.deleteSingleEvent = (req, res) =>  {

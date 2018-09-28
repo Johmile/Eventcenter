@@ -5,21 +5,6 @@ const multer = require('multer')
 const path = require('path')
 
 
-// const storage = multer.diskStorage({
-//     destination:'../images/'
-//     ,
-//     filename: function(req, file, cb){
-//         cb(null, file.fieldname + Date.now() + file.originalname)
-//     }
-// })
-// const upload = multer({
-//     storage:storage
-// })
-
-// exports.uploadImages = upload.single('photo'), (req, res) => {
-//     console.log(req.file)
-// }
-
 //GET ALL USERS
 exports.getAllUser = async (req, res) => {
     const allUser = await user.find()
@@ -70,8 +55,7 @@ exports.postUser =   (req, res) => {
         const newUser =  user.create({
             name:req.body.name,
             email:req.body.email,
-            password:req.body.password,
-            pic:req.file.path
+            password:req.body.password
         })
         newUser.password = hash
         newUser.save()

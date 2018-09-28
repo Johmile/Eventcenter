@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link} from 'react-router-dom'
-import '../css/bootstrap.min.css'
+import {  Link } from 'react-router-dom'
 import '../css/login.css'
-import Header from '../Layout/header'
+import Footer from '../Layout/footer'
 
 
 export default class login extends Component {
@@ -50,23 +49,42 @@ export default class login extends Component {
         const logged = this.state 
     return (
         <div>
-            <Header/>
-            <div className="card-panel" id="login">
-                <form method="post">
-                    <h1 className="red">Login here</h1>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <i className ="mdi mdi-account"><input type="email" name="email" class="form-control" placeholder="Enter your email" required id="email" value={this.state.email} onChange={this.validateForm}/></i>
+            <div style={{marginTop:'120px'}}>
+                <div class="container my-5" >
+                        <div class="row justify-content-center">
+                            <div class="col-md-4 col-lg-4 col-xs-4">
+                            <div class="card text-center card-form">
+                                <div class="card-body">
+                                <h3 class=""><i class="fa fa-user "></i> Sign In</h3>
+                                <h6 class="font-weight-light">Enter your login details</h6>
+
+                                <div class="md-form">
+                                
+                                <input type="email" id="form2" class=" form-control" value={this.state.email} onChange={this.validateForm}/>
+                                <label for="form2" class="active">Email</label>
+                                </div>
+                                <div class="md-form">
+                                
+                                <input type="password" id="form4" class="form-control" value={this.state.password} onChange={this.handlePassword}/>
+                                <label for="form4">Password</label>
+                                </div>
+                                
+                                <button
+                                    class="btn btn-indigo btn-block"
+                                    onClick={this.handleSubmit}
+                                    >
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i> Sign In
+                                    </button>
+                                
+                                <hr/>
+                                </div>
+                            </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <i className="mdi mdi-lock"><input type="password" name="password" class="form-control" placeholder="Enter your password" required id="password" value={this.state.password} onChange={this.handlePassword}/></i>
-                        </div>
-                        <Link to="/dash">
-                        <button type="submit" class="btn btn-primary btn-lg active" onClick={this.handleSubmit}>Login</button>
-                        </Link>
-                    </form>
+                    </div>
             </div>
+            <Footer/>
+            
       </div>
     )
   }

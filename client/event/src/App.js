@@ -1,21 +1,19 @@
 import React, { Component } from 'react'
-import {Route, Link} from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import './App.css';
-import Login from './Components/Pages/login'
-import Register from './Components/Pages/register'
-import Dashboard from './Components/Pages/dashboard'
-import Events from './Components/Pages/View'
-//import Header from './Components/Layout/header'
+import Header from './Components/Layout/header'
+//import Footer from './Components/Layout/footer'
+import Router from './router'
+import './Components/css/MDB-Free/css/bootstrap.min.css'
+import './Components/css/MDB-Free/css/mdb.min.css'
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-
-        <Route path="/" exact={true} component={Dashboard}/>
-        <Route path="/register" exact={true} component={Register}/>
-        <Route path="/login" exact={true} component={Login}/>
-        <Route path="/dash" exact={true} component={Events}/>
+        <Route component={Header} />
+        <Route component={Router} />
+        {/* <Route component={Footer} /> */}
       </div>
     );
   }

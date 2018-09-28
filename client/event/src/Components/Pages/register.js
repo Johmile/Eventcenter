@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import '../css/bootstrap.min.css'
 import '../css/register.css'
-import '../css/MaterialDesign-Webfont-master/css/materialdesignicons.min.css'
-
+import Footer from '../Layout/footer'
 
 export default class register extends Component {
     constructor(){
@@ -69,32 +67,52 @@ export default class register extends Component {
       
     return (
         <div>
-            
-        <div className="card-panel" id="register">
-        <div className="red reg">
-            <h1>Register here</h1>
+            <div style={{marginTop:'120px'}}>
+                <div class="container my-5" >
+                        <div class="row justify-content-center">
+                            <div class="col-md-5 col-lg-5 col-xs-5">
+                            <div class="card text-center card-form">
+                                <div class="card-body">
+                                <h3 class=""><i class="fa fa-user "></i> Sign Up</h3>
+                                <h6 class="font-weight-light">Sign up with valid credentials</h6>
+
+                                <div class="md-form">
+                                <input type="text" id="name" name="name" class="form-control " placeholder="" required  onChange={this.handleName}/>
+                                <label for="form2" class="active">Name</label>
+                                </div>
+
+                                <div class="md-form">                               
+                                <input type="email" name="email" class="form-control" placeholder="" required id="email"  onChange={this.handleEmail}/>
+                                <label for="form2" class="active">Email</label>
+                                </div>
+
+                                <div class="md-form">                               
+                                <input type="password"  id="password" name="password" class="form-control" placeholder="" required id="password" onChange={this.handlePassword}/>
+                                <label for="form2" class="active">Password</label>
+                                </div>
+
+                                <div class="md-form">                               
+                                <input type="text" id="secret" name="secret" class="form-control" placeholder="" required id="secret"  onChange={this.handleSecret}/>
+                                <label for="form2" class="active">Enter any safe word</label>
+                                </div>
+                                
+                                <button
+                                    class="btn btn-indigo btn-block"
+                                    onClick={this.handleRegister}
+                                    >
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i> Register
+                                    </button>
+                                
+                                <hr/>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
-            
-            <form method="post">
-                <div class="form-group">
-                    <label>Name</label>
-                    <i class="mdi mdi-account"><input type="text" id="name" name="name" class="form-control " placeholder="Enter your name" required id="name"  onChange={this.handleName}/></i>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <i class="mdi mdi-email"><input type="email" name="email" class="form-control" placeholder="Enter your email" required id="email"  onChange={this.handleEmail}/></i>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <i className="mdi mdi-lock"><input type="password"  id="password" name="password" class="form-control" placeholder="Enter your password" required id="password" onChange={this.handlePassword}/></i>
-                </div>
-                <div class="form-group">
-                    <label>Secret*</label>
-                    <i class="mdi mdi-security"><input type="text" id="secret" name="secret" class="form-control" placeholder="Enter any secret value" required id="secret"  onChange={this.handleSecret}/></i>
-                </div>
-                <button type="submit"  class="btn btn-primary btn-lg active" onClick={this.handleRegister}>Register</button>
-            </form>
-        </div>
+            <Footer/>
+        
+
     </div>
     )
   }
