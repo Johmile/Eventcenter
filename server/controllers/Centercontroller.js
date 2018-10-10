@@ -30,33 +30,33 @@ exports.createNewCenter = async (req, res) => {
       message: `Name or Address is too long`
     });
   } else {
-    // geocoder.geocode(req.body.location, (err, data) => {
-    //   if(err || !data.length){
-    //     res.json({
-    //       message:`invalid address`
-    //     })
-    //   }
-    //   var lat = data[0].latitude
-    //   var lng = data[0].longitude
-    //   var location = data[0].formattedAddress
-    // })
-    const newCenter = await center.create(req.body)
-    // newCenter.location = location
-    // newCenter.lat = lat
-    // newCenter.lng = lng
-    // await newCenter.save()
-    // const newCenter = await center.create({
-    //   name:body.name,
-    //   address:body.address,
-    //   capacity:body.capacity,
-    //   price:body.price,
-    //   description:body.description,
-    //   terms:body.terms,
-    //   contact:body.contact,
-    //   location:location,
-    //   lat:lat,
-    //   lng:lng
-    // });
+    geocoder.geocode(req.body.location, (err, data) => {
+      if(err || !data.length){
+        res.json({
+          message:`invalid address`
+        })
+      }
+      var lat = data[0].latitude
+      var lng = data[0].longitude
+      var location = data[0].formattedAddress
+    })
+    //const newCenter = await center.create(req.body)
+    newCenter.location = location
+    newCenter.lat = lat
+    newCenter.lng = lng
+    await newCenter.save()
+    const newCenter = await center.create({
+      name:body.name,
+      address:body.address,
+      capacity:body.capacity,
+      price:body.price,
+      description:body.description,
+      terms:body.terms,
+      contact:body.contact,
+      location:location,
+      lat:lat,
+      lng:lng
+    });
     res.json({info:newCenter});
   }
 };

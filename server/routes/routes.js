@@ -33,10 +33,9 @@ router.put('/events/update/:id', verifyToken, Eventcontroller.updateSingleEvent)
 //USER ROUTER
 router.get('/user/get', userController.getAllUser);
 
-router.get('/user/get/:id', verifyToken, userController.getSingleUser);
+router.get('/user/get/:id', userController.getSingleUser);
 router.put('/user/update/:id', verifyToken, userController.updateUser);
 router.delete('/user/delete/:id', verifyToken, userController.deleteUser)
-
 
 //AUTH ROUTES
 router.post('/register', authController.encodePassword);

@@ -11,6 +11,9 @@ import center from './Components/Pages/center'
 import Booking from './Components/Pages/booking'
 import Payment from './Components/Pages/payment'
 import Manual from './Components/Pages/manual'
+import ErrorPage from './Components/Pages/errorPage'
+import UserProfile from './Components/Pages/userProfile'
+import PayStack from './Components/Pages/paystack'
 
 export default class router extends Component {
   render() {
@@ -25,6 +28,9 @@ export default class router extends Component {
             <Route path="/center/:id" strict exact={true} component={center}/>
             <Route path="/booking" strict exact={true} component={Booking}/>
             <Route path="/centers" strict exact={true} component={Centers}/>
+            <Route path="/profile/:id" strict exact={true} component={UserProfile}/>
+            <Route path="/paystack" strict exact={true} component={PayStack}/>
+            <Route path="*" strict exact={true} component={ErrorPage}/>
         </Switch>
       </div>
     )

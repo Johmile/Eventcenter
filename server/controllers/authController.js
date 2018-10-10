@@ -17,21 +17,28 @@ const verifyToken = require('./verifyToken')
 exports.encodePassword = async (req, res) => {
   //console.log('hello')
   const body = req.body;
+  const emailExist = await user.findOne({email: req.body.email})
   const hashpassword = bcrypt.hashSync(req.body.password,10);
-  if (!body.name || !body.email  || !body.password ||!body.secret) {
+  if (!body.name || !body.email  || !body.password || !body.secret) {
     res.json({
-      message:`Please fill in all required input fields`
+      message:`Please fill in all required input fields`,
+      auth: false
     })
   }
   else if (body.name.length > 20) {
     res.json({
-      message:`Name must not be more than 20 characters`
+      message:`Name must not be more than 20 characters`,
+      auth: false
     })
   }
   else if (body.password.length < 8) {
     res.json({
-      message:`Password must be more than 7 characters`
+      message:`Password must be more than 7 characters`,
+      auth: false
     })
+  }
+  else if(emailExist){
+    res.json({message:'Email already exist', auth: false})
   }
   else {
     await user.create({
@@ -41,11 +48,9 @@ exports.encodePassword = async (req, res) => {
       date:body.date,
       secret:body.secret
     })
-    const token = jwt.sign({id:user.id}, config.secret, {expiresIn:'1h'})
     res.json({
       message:`Registration was successful`,
-      auth:true,
-      token:token
+      auth:true
     })
   }
  
@@ -100,19 +105,22 @@ exports.decodePassword = async (req, res, next) => {
 exports.loginUser = async (req, res) => {
   if(req.body.email == '' || req.body.password == '') {
     res.json({
-      message:`Please fill in required input field`
+      message:`Please fill in required input field`,
+      auth: false
     })
   }
   else {
     await user.findOne({email:req.body.email}, (err, user) => {
     if (err) {
       res.json({
-        message:`Unable to complete task`
+        message:`Unable to complete task`,
+        auth: false
       })
     }  
     else if (!user) {
       res.json({
-        message:`Wrong or invalid email address`
+        message:`Wrong or invalid email address`,
+        auth: false
       })
     }
     else{
@@ -126,11 +134,13 @@ exports.loginUser = async (req, res) => {
       }
       else { // RETURN USER TOKEN
           const token = jwt.sign({id:user.id, email:user.email}, config.secret, {expiresIn:'1h'})
+          var id = user.id
   
           res.json({
             message: `Login was successful`,
             auth:true,
-            token:token
+            token:token,
+            id:id
           })
       }
     }

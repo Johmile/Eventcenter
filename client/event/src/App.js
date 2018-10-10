@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Route component={Header} />
+        {/* <Route component={Header} /> */}
         <Route component={Router} />
         {/* <Route component={Footer} /> */}
       </div>

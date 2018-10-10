@@ -4,6 +4,22 @@ import '../css/header.css'
 
 
 export default class Navbar extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      token: null,
+      id:''
+    }
+  }
+  async componentWillMount() {
+    const token = await window.localStorage.getItem('token')
+    const id = await window.localStorage.getItem('clientId')
+    this.setState({token: token, id:id})
+  }
+  async handleLogOut() {
+    await window.localStorage.clear()
+  }
+  
   render() {
     return (
       <div>
@@ -15,20 +31,46 @@ export default class Navbar extends Component {
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
-                        <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        
-                        </ul>
-                        
-                        
-                        <Link to='/login' className="nav-link btn-indigo text-white">
+                    {this.state.token ? (
+                      <ul class="navbar-nav mr-auto">
+                      
+                      <li className="nav-item">
+                        <Link to='/dashboard' className="nav-link ">
+                           Catering service
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to='/dashboard' className="nav-link ">
+                           Book bouncer
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to={`/profile/${this.state.id}`} className="nav-link ">
+                           Profile
+                        </Link>
+                    </li>
+                      <li className="nav-item"><Link to='/' className="nav-link      btn-danger text-white"  onClick={this.handleLogOut.bind(this)}>
+                        <i className="fa fa-sign-out" aria-hidden="true"></i> Log Out
+                      </Link></li>
+                      
+                      
+                      </ul>
+                      
+                    ) : (
+                      <ul class="navbar-nav mr-auto">
+                      <li className="nav-item"><Link to='/login' className="nav-link btn-indigo text-white">
                         <i className="fa fa-sign-in" aria-hidden="true"></i> Sign In
-                      </Link>
-                      <Link to='/register' className="nav-link  text-dark">
+                      </Link></li>
+                      <li className="nav-item"><Link to='/register' className="nav-link  text-dark">
                         <i className="fa fa-sign-in" aria-hidden="true"></i> Sign up
-                      </Link>
+                      </Link></li>
+                      </ul>
+                    )
+                  }
+                        
+                        
+                        
+                        
                     </div>
                 </div>
             </nav>
