@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "paystack": "^2.0.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-paystack": "^2.0.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4"
   },

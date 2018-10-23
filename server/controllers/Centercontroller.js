@@ -53,6 +53,7 @@ exports.createNewCenter = async (req, res) => {
       description:body.description,
       terms:body.terms,
       contact:body.contact,
+      price: body.price,
       location:location,
       lat:lat,
       lng:lng
@@ -99,18 +100,15 @@ exports.updateSingleCenter = async (req, res) => {
     }
     else{
       info.available = req.body.available || info.available
+      info.price = req.body.price || info.price
+      info.capacity = req.body.capacity || info.capacity
+      info.name = req.body.name || info.name
+      info.description = req.body.description || info.description
+      info.capacity = req.body.capacity || info.capacity
+      info.address = req.body.address || info.address
+      info.terms = req.body.terms || info.terms
       await info.save()
       res.json({message:'you have successffully booked center'})
     }
-  // center.findByIdAndUpdate(req.params.id, {available:req.body.available}, {new:true}, (err, center) => {
-  //   if (center) {
-  //     res.json({
-  //       message: `status changed successfully`
-  //     });
-  //   } else {
-  //     res.json({
-  //       message: `ID does not exist`
-  //     });
-  //   }
-  // });
+
 };

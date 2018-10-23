@@ -23,7 +23,8 @@ const centerSchema = new mongoose.Schema({
     sound: {type:String, default: 'null'},
     air: {type:String, default: 'null'},
     light: {type:String, default: 'null'},
-    security: {type:String, default: 'null'}
+    security: {type:String, default: 'null'},
+    price: String
 
 },{
     timestamps:true
