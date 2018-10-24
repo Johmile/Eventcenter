@@ -80,7 +80,7 @@ exports.getSingleCenter = async (req, res) => {
 
 //DELETE A CENTER
 exports.deleteSingleCenter = (req, res) => {
-  center.findByIdAndRemove(req.params.id, (err, center) => {
+  center.findOneAndRemove({id:req.params.id}, (err, center) => {
     if (center) {
       res.json({
         message: `You have successfully delete ${center}`

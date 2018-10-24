@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const email = require('mongoose-type-email');
+const mongodbErrorHandler = require('mongoose-mongodb-errors')
 
 const userSchema = new mongoose.Schema({
     name: {type: String, required: true, unique: true},
@@ -12,4 +13,5 @@ const userSchema = new mongoose.Schema({
     secret:{type: String, required: true},
     //admin: {type:boolean, default: false}
 });
+userSchema.plugin(mongodbErrorHandler)
 module.exports = mongoose.model('user', userSchema);

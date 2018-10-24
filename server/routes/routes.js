@@ -6,6 +6,7 @@ const userController = require('../controllers/userController')
 const authController = require('../controllers/authController')
 const verifyToken = require('../controllers/verifyToken')
 const admincontroller = require('../controllers/admincontroller')
+const { catchErrors } = require('../handlers/errorhandler')
 const pic = require('../models/pic')
 
 
@@ -15,106 +16,50 @@ const path = require('path')
 const bcrypt = require('bcryptjs')
 
 //CENTER ROUTER
-router.post('/centers',  Centercontroller.createNewCenter);
-router.get('/centers/get',  Centercontroller.getAllCenter);
-router.get('/centers/get/:id',  Centercontroller.getSingleCenter);
-router.delete('centers/delete/:id',  Centercontroller.deleteSingleCenter);
-router.put('/available/:id', Centercontroller.updateSingleCenter)
+router.post('/centers',  catchErrors(Centercontroller.createNewCenter));
+router.get('/centers/get',  catchErrors(Centercontroller.getAllCenter));
+router.get('/centers/get/:id',  catchErrors(Centercontroller.getSingleCenter));
+router.delete('centers/delete/:id',  catchErrors(Centercontroller.deleteSingleCenter));
+router.put('/available/:id', catchErrors(Centercontroller.updateSingleCenter))
 
 
 
 //EVENT ROUTER
-router.post('/events',  Eventcontroller.postNewEvent);
-router.get('/events/get', Eventcontroller.getAllEvent);
-router.get('/events/get/:id',  Eventcontroller.getSingleEvent);
-router.delete('/events/delete/:id', verifyToken, Eventcontroller.deleteSingleEvent);
-router.put('/events/update/:id', verifyToken, Eventcontroller.updateSingleEvent)
+router.post('/events',  catchErrors(Eventcontroller.postNewEvent));
+router.get('/events/get', catchErrors(Eventcontroller.getAllEvent));
+router.get('/events/get/:id',  catchErrors(Eventcontroller.getSingleEvent));
+router.delete('/events/delete/:id', verifyToken, (Eventcontroller.deleteSingleEvent));
+router.put('/events/update/:id', verifyToken, catchErrors(Eventcontroller.updateSingleEvent))
 
 //USER ROUTER
-router.get('/user/get', userController.getAllUser);
+router.get('/user/get', catchErrors(userController.getAllUser));
 
-router.get('/user/get/:id', userController.getSingleUser);
-router.put('/user/update/:id', verifyToken, userController.updateUser);
-router.delete('/user/delete/:id', verifyToken, userController.deleteUser)
+router.get('/user/get/:id', catchErrors(userController.getSingleUser));
+router.put('/user/update/:id', verifyToken, catchErrors(userController.updateUser));
+router.delete('/user/delete/:id', verifyToken, catchErrors(userController.deleteUser))
 
 //AUTH ROUTES
-router.post('/register', authController.encodePassword);
+router.post('/register', catchErrors(authController.encodePassword));
 router.post('/login', authController.loginUser)
-router.get('/gettokens',  authController.decodePassword);
+router.get('/gettokens',  catchErrors(authController.decodePassword));
 
 //FORGOT PASSWORD ROUTES
 router.post('/forgot', authController.forgotPassword)
 //router.post('/reset', authController.updatePassword)
 router.put('/reset/:email', authController.resetPassword)
-router.post('/message', authController.reportProblem)
+router.post('/message', catchErrors(authController.reportProblem))
 
 //Admin routes
-router.post('/admin', admincontroller.createSuperUser)
+router.post('/admin', catchErrors(admincontroller.createSuperUser))
 router.post('/admin/login', admincontroller.loginAdmin)
-router.get('/admin', admincontroller.getAllAdmin)
-router.delete('/admin/:id', admincontroller.deleteAdmin)
-router.put('/admin/:id', admincontroller.updateProfile)
+router.get('/admin', catchErrors(admincontroller.getAllAdmin))
+router.delete('/admin/:id', catchErrors(admincontroller.deleteAdmin))
+router.put('/admin/:id', catchErrors(admincontroller.updateProfile))
 
 //router.post('/upload', userController.uploadImages)
 router.post('/search', userController.searchUser)
 
 
-// const storage = multer.diskStorage({
-//     destination:(req, file, cb)=>{
-//         cb(null, './uploads/')
-//     },
-//     filename:(req, file, cb)=>{
-//         // cb(null, new Date().toISOString()+ file.fieldname+ file.originalname)
-//         cb(null, file.fieldname +  Date.now() + path.extname(file.originalname))
-//     }
-// })
-// const upload = multer({
-//     storage:storage,
-//     limits:{fileSize:1000000},
-//     fileFilter:(req, file, cb) => {
-//         checkFileType(file, cb)
-//     }
-// })
-// const checkFileType = (file, cb)=>{
-//     //file type
-//     const fileType = /jpeg|jpg|png/
-//     //file extension
-//     const extname = fileType.test(path.extname(file.originalname).toLowerCase)
-//     //mimetype
-//     const mime = fileType.test(file.mimetype)
-//     if (mime || extname){
-//         return cb(null, true)
-//     }
-//     else{
-//         cb('Error: Images only')
-//     }
-// }
-
-// router.post('/upload',upload.single('pic') ,(req, res) =>{
-//    // console.log(req.file)
-//     if (!req.file){
-//         res.json({message:`Error: No file selected`})
-//     }   
-//     else{
-//         pic.create({
-        
-//             pic:req.file.path,
-            
-//         },(err,user)=>{
-//             if(err){
-//                 res.json({message:err})
-//             }
-//             else{
-//                 res.json({message:user})
-//             }
-//         })
-//     } 
-
-// });
-// router.get('/img', async(req, res)=> {
-//     const picture =await pic.find()
-//     res.json(picture)
-// })
 //Using cloudinary
 const storage = multer.diskStorage({
     filename:function(req, file, cb){

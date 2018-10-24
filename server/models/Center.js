@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongodbErrorHandler = require('mongoose-mongodb-errors')
 
 const centerSchema = new mongoose.Schema({
     name:{type:String},
@@ -29,4 +30,5 @@ const centerSchema = new mongoose.Schema({
 },{
     timestamps:true
 });
+centerSchema.plugin(mongodbErrorHandler)
 module.exports = mongoose.model('center', centerSchema);
