@@ -7,13 +7,12 @@ const authController = require('../controllers/authController')
 const verifyToken = require('../controllers/verifyToken')
 const admincontroller = require('../controllers/admincontroller')
 const { catchErrors } = require('../handlers/errorhandler')
-const pic = require('../models/pic')
 
 
 const user = require('../models/User')
 const multer = require('multer')
 const path = require('path')
-const bcrypt = require('bcryptjs')
+
 
 //CENTER ROUTER
 router.post('/centers',  catchErrors(Centercontroller.createNewCenter));
@@ -68,7 +67,7 @@ const storage = multer.diskStorage({
 })
 const imageFilter = function(req, file, cb){
     if(!file.originalname.match(/\.(jpeg|jpg|png)$/i)){
-        return cb(new Error('Only image files are allowed'), false)
+        return cb('Only image files are allowed', false)
     }
     else{
         cb(null,true)
@@ -78,10 +77,31 @@ var upload = multer({
     storage:storage,
     fileFilter:imageFilter
 })
+var config = require('../config')
 var cloudinary = require('cloudinary')
 cloudinary.config({
-    cloud_name:'otitoju',
-    api_key:process.env.CLOUDINARY_API_KEY,
-    api_secret:process.env.CLOUDINARY_API_SECRET
+    cloud_name: config.cloud_name,
+    api_key : config.api_key,
+    api_secret : config.api_secret
+})
+const center = require('../models/Center')
+router.put('/centerimage/:id', upload.single('photo'), async(req, res) => {
+    
+    if(req.file == undefined || req.file == ''){
+        res.json({message:`Error: No file selected`})
+    }
+    else{
+        var image = req.file.path
+        const result = await cloudinary.uploader.upload(image)
+        let imgUrl = result.secure_url
+        const Center = await center.findByIdAndUpdate(req.params.id,{
+            photo:imgUrl
+        }, {new:true})
+        res.json({
+            center:Center,
+            message:'Message: Picture uploaded successfully'
+        })
+    }
+    
 })
 module.exports = router;
