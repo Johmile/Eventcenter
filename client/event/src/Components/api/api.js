@@ -3,7 +3,7 @@ import axios from 'axios'
 //allcenters
 export async function getAllCenters() {
     try {
-       const centers = await axios.get('http://localhost:1000/centers/get') 
+       const centers = await axios.get('http://localhost:1000/centers/get')
        return centers.data
         
     } catch (error) {
@@ -27,7 +27,6 @@ export async function getSingleUser(id) {
     try {
         const token = await window.localStorage.getItem('token')
         const user = await axios.get(`http://localhost:1000/user/get/${id}`, token)
-        console.log(user.data)
         return user.data
     } catch (error) {
         return error.message

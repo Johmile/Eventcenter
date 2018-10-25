@@ -39,15 +39,21 @@ export default class booking extends Component {
                   <option>Graduation</option>
                   <option>Others</option>
               </select>
+              <label>Gender</label>
+              <select class="form-control" id="sel1">
+                  <option>--Select your gender--</option>
+                  <option>Female</option>
+                  <option>Male</option>
+              </select>
   
               <label>Date of occassion</label>
               <input type="date" class="form-control" placeholder=""/>
               <hr/>
   
-              <h2 class="text-center">Personnal information</h2>
-              <hr/>
+              {/* <h2 class="text-center">Personnal information</h2>
+              <hr/> */}
   
-              <div class="form-group row">
+              {/* <div class="form-group row">
                 <div class="col-sm-6">
                   <label>Surname</label>
                   <input type="text" class="form-control" placeholder=""/>
@@ -75,7 +81,7 @@ export default class booking extends Component {
               <label>Email</label>
               <input type="email" class="form-control" placeholder=""/>
   
-              <hr/>
+              <hr/> */}
               <div class="text-right">
                 <Link to="/payment"><button class="btn btn-primary">
                    Proceed to payment <i class="fa fa-cc-arrow" aria-hidden="true"></i>

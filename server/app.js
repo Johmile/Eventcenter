@@ -3,12 +3,12 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-//const cors = require('cors')
+const cors = require('cors')
 const errorHandler = require('./handlers/errorhandler')
 const router = require('./routes/routes')
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-//app.use( cors())
+app.use( cors())
 app.use('/', router);
 
 app.use(errorHandler.notFound);

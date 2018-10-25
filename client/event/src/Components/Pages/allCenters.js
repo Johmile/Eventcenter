@@ -57,10 +57,10 @@ export default class eventView extends Component {
                 </div>}
               <div class="card-deck" style={{marginTop:'20px'}}>
                   { this.state.centers ? this.state.centers.map( (center, index) => (
-                      <div class="col-md-4">
+                      <div class="col-md-4" key={index}>
                           <div class="card" style={{marginBottom:'20px'}}>
                               <div class="">
-                                  <img class="card-img-top "  src={require('../images/capital.jpg')} class="img-fluid" alt=""/>
+                                  <img class="card-img-top "  src={center.photo} class="img-fluid" alt=""/>
                               </div>
                               <div class="card-body">    
                                       <h4 class="card-title" style={{fontStyle: 'italic',fontFamily: 'Times New Roman'}}><strong> {center.name}</strong></h4>                       

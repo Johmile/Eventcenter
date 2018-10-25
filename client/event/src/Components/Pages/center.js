@@ -65,7 +65,7 @@ export default class center extends Component {
             {
               this.state.center && (
                 <div class="card">
-                  <img class="card-img-top"  src={require('../images/capital.jpg')} />
+                  <img class="card-img-top"  src={this.state.center.photo} />
                   <div class="card-body">
                       <h1 class="card-title text-center h4 mb-4" style={{fontStyle: 'italic',fontFamily: 'Times New Roman'}}>{ this.state.center.name }   
                       </h1>
