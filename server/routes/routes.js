@@ -18,7 +18,7 @@ const path = require('path')
 router.post('/centers',  catchErrors(Centercontroller.createNewCenter));
 router.get('/centers/get',  catchErrors(Centercontroller.getAllCenter));
 router.get('/centers/get/:id',  catchErrors(Centercontroller.getSingleCenter));
-router.delete('centers/delete/:id',  catchErrors(Centercontroller.deleteSingleCenter));
+router.delete('/centers/delete/:id',  Centercontroller.deleteSingleCenter)
 router.put('/available/:id', catchErrors(Centercontroller.updateSingleCenter))
 
 

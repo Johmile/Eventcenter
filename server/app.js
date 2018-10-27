@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use( cors())
 app.use('/', router);
 
-app.use(errorHandler.notFound);
+//app.use(errorHandler.notFound);
 
 // production error handler
 app.use(errorHandler.productionErrors);
