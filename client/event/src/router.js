@@ -14,6 +14,7 @@ import Manual from './Components/Pages/manual'
 import ErrorPage from './Components/Pages/errorPage'
 import UserProfile from './Components/Pages/userProfile'
 import PayStack from './Components/Pages/paystack'
+import NewCenter from './Components/Pages/newCenter'
 
 export default class router extends Component {
   render() {
@@ -21,6 +22,7 @@ export default class router extends Component {
       <div>
         <Switch>
             <Route path="/" strict exact={true} component={Dashboard}/>
+            <Route path="/newcenter" strict exact={true} component={NewCenter}/>
             <Route path="/manual" strict exact={true} component={Manual}/>
             <Route path="/payment" strict exact={true} component={Payment}/>
             <Route path="/register" strict exact={true} component={Register}/>

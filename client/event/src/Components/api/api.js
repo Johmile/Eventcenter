@@ -32,3 +32,26 @@ export async function getSingleUser(id) {
         return error.message
     }
 }
+
+//upload image
+export async function uploadImage(id){
+    try {
+        const image = axios.put(`http://localhost:1000/centerimage/${id}`)
+        console.log(image.data)
+        return image.data
+    } catch (error) {
+        return error.message
+    }
+}
+//create new center
+export async function createNewCenter(details){
+    try {
+        const { name, address, capacity, photo} = details
+        const data = new FormData();
+          data.append('photo', photo)
+        const newCenter = await axios.post('http://localhost:1000/centers', {name, address, capacity, data})
+        return newCenter.data
+    } catch (error) {
+        return error.message
+    }
+}

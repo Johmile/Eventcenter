@@ -64,16 +64,16 @@ export default class center extends Component {
                 </div>}
             {
               this.state.center && (
-                <div class="card">
+                <div class="">
                   <img class="card-img-top"  src={this.state.center.photo} />
-                  <div class="card-body">
-                      <h1 class="card-title text-center h4 mb-4" style={{fontStyle: 'italic',fontFamily: 'Times New Roman'}}>{ this.state.center.name }   
-                      </h1>
-                      <p class=" my-4">
-                      <i class="fa fa-map-marker "></i> {this.state.center.address}
-                      </p>
+                  <div class="">
+                      <h2 className="text-left"  style={{fontFamily: 'Times New Roman', color:'blue'}}>{ this.state.center.name.toUpperCase() }   
+                      </h2>
+                      <h3 className=" my-4 text-left text-muted">
+                      <i className="fa fa-map-marker"></i> {this.state.center.address}
+                      </h3>
                       <hr/>
-                          {this.state.center.facility}
+                          {/* {this.state.center.facility} */}
                       <div class="row">
           
                           <div class="col-md-4 offset-md-1 mx-3 my-3">
@@ -94,12 +94,13 @@ export default class center extends Component {
                               <h3>Description</h3>
                               <p>{this.state.center.description}</p>
                           </div>
+                          
                           <div class="col-md-4 offset-md-1 mx-3 my-3">
                               
                               <h5>Status: <strong  id="avail"></strong></h5>
                           </div>
                       </div>
-                      <div id="map" style={{height: '400px',width:'100px'}}></div>
+                      {/* <div id="map" style={{height: '400px',width:'100px'}}></div> */}
                       <Link to="/booking">
                       <button className="btn btn-primary" id="book">Book</button>
                       </Link>
