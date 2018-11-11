@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Header from '../Layout/header'
 import Footer from '../Layout/footer'
-import { createNewCenter, uploadImage } from '../api/api'
 import axios from 'axios'
 
 export default class newCenter extends Component {
@@ -35,32 +34,10 @@ export default class newCenter extends Component {
           axios.post('http://localhost:1000/centers', formdata)
           .then( res => {
               alert(res.data.message)
+              //console.log(res.data.message)
           })
           .catch( err => console.log(err))
-        // fetch('http://localhost:1000/centers',  {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         name: this.state.name,
-        //         address:this.state.address,
-        //         terms: this.state.terms,
-        //         description: this.state.description,
-        //         contact: this.state.contact,
-        //         price: this.state.price,
-        //         location: this.state.location,
-        //         paystackurl: this.state.paystackurl,
-        //         capacity: this.state.capacity
-        //     })
-        // })
-        // .then( res => res.json())
-        // .then( res => {
-        //     // console.log(res)
-        //     alert(res.message)
-        // })
-        // .catch( err => console.log(err))
+       
     }
     handleImage(e){
             this.setState({photo:e.target.files[0]})
@@ -100,7 +77,7 @@ export default class newCenter extends Component {
           <div class="row justify-content-center">
             <div class="col-md-9 col-lg-9 col-xs-9">
                   
-                    <form class="border border-light p-5" style={{marginTop:'40px', marginBottom:'20px'}} encType="multipart/form-data">
+                    <form class="border border-light p-5" style={{marginTop:'40px', marginBottom:'20px'}} encType="multipart/form-data" onSubmit={this.handleSubmit.bind(this)}>
 
             
 
@@ -246,8 +223,9 @@ export default class newCenter extends Component {
                         <div class="text-center">
                         <button 
                         class="btn btn-success"
-                        type="submit"
-                        onClick={this.handleSubmit.bind(this)} ><i class="fa fa-plus-circle" aria-hidden="true"></i> Post</button>    </div>  
+                        //onSubmit={this.handleSubmit.bind(this)}
+                        onClick={this.handleSubmit.bind(this)}
+                         ><i class="fa fa-plus-circle" aria-hidden="true"></i> Post</button>    </div>  
                     </form>
             </div>
           </div>

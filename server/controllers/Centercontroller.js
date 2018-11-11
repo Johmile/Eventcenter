@@ -11,7 +11,7 @@ const options = {
 const geocoder = NodeGeocoder(options)
 //FIND ALL CENTER
 exports.getAllCenter = async (req, res) => {
-  const centers = await center.find();
+  const centers = await center.find().sort({'_id':-1});
   // if(centers.available == false){
   //   res.json({message:`No available center`})
   // }
@@ -30,22 +30,23 @@ exports.createNewCenter = async (req, res) => {
       message: `Name or Address is too long`
     });
   } else {
-    geocoder.geocode(req.body.location, (err, data) => {
-      if(err || !data.length){
-        res.json({
-          message:`invalid address`
-        })
-      }
-      var lat = data[0].latitude
-      var lng = data[0].longitude
-      var location = data[0].formattedAddress
-    })
+    // geocoder.geocode(req.body.location, (err, data) => {
+    //   if(err || !data.length){
+    //     res.json({
+    //       message:`invalid address`
+    //     })
+    //   }
+    //   var lat = data[0].latitude
+    //   var lng = data[0].longitude
+    //   var location = data[0].formattedAddress
+
+    // })
     //const newCenter = await center.create(req.body)
-    newCenter.location = location
-    newCenter.lat = lat
-    newCenter.lng = lng
-    await newCenter.save()
-    const newCenter = await center.create({
+    // newCenter.location = location
+    // newCenter.lat = lat
+    // newCenter.lng = lng
+    // await newCenter.save()
+    const newCenter = center.create({
       name:body.name,
       address:body.address,
       capacity:body.capacity,
@@ -53,12 +54,12 @@ exports.createNewCenter = async (req, res) => {
       description:body.description,
       terms:body.terms,
       contact:body.contact,
-      price: body.price,
-      location:location,
-      lat:lat,
-      lng:lng
+      price: body.price
+      // location:location,
+      // lat:lat,
+      // lng:lng
     });
-    res.json({info:newCenter});
+    res.json({info:newCenter, message: 'center created successfully'});
   }
 };
 
@@ -94,7 +95,7 @@ exports.deleteSingleCenter = (req, res) => {
 };
 //UPDATE A SINGLE CENTER
 exports.updateSingleCenter = async (req, res) => {
-    const info = await center.findOne({id: req.params.id})
+    const info = await center.findOne({_id: req.params.id})
     if(!info){
       res.json({message:`This center is invalid`})
     }
@@ -107,8 +108,9 @@ exports.updateSingleCenter = async (req, res) => {
       info.capacity = req.body.capacity || info.capacity
       info.address = req.body.address || info.address
       info.terms = req.body.terms || info.terms
+      info.paystackurl = req.body.paystackurl || info.paystackurl
       await info.save()
-      res.json({message:'you have successffully booked center'})
+      res.json({message:'you have successfully booked center'})
     }
 
 };

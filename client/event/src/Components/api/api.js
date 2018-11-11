@@ -43,14 +43,14 @@ export async function uploadImage(id){
         return error.message
     }
 }
-//create new center
-export async function createNewCenter(details){
+
+//update center status
+export async function updateCenter(id){
     try {
-        const { name, address, capacity, photo} = details
-        const data = new FormData();
-          data.append('photo', photo)
-        const newCenter = await axios.post('http://localhost:1000/centers', {name, address, capacity, data})
-        return newCenter.data
+        var details;
+        const {available} = details
+        const update = await axios.put(`http://localhost:1000/available/${id}`, {available})
+        return update.data
     } catch (error) {
         return error.message
     }

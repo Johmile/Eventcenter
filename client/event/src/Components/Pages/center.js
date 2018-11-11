@@ -101,14 +101,40 @@ export default class center extends Component {
                           </div>
                       </div>
                       {/* <div id="map" style={{height: '400px',width:'100px'}}></div> */}
-                      <Link to="/booking">
-                      <button className="btn btn-primary" id="book">Book</button>
-                      </Link>
+                      <button class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter" id="book">Get price details</button>
+                      {/* <Link to="/booking">
+                      <button className="btn btn-primary" >Book</button>
+                      </Link> */}
                   </div>
                 </div>
               )
             }
               </div>
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      
+                <div class="modal-dialog modal-dialog-centered" role="document">
+            
+            
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Price Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h3>Venue Price: #200,000</h3>
+                            <h3>Date of event</h3>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a href="/booking"><button class="btn btn-primary">
+                                Book now <i class="fa fa-cc-arrow" aria-hidden="true"></i>
+                            </button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
               <Footer/>
             </div>
           )

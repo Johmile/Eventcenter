@@ -7,6 +7,7 @@ const authController = require('../controllers/authController')
 const verifyToken = require('../controllers/verifyToken')
 const admincontroller = require('../controllers/admincontroller')
 const { catchErrors } = require('../handlers/errorhandler')
+const bookingcontroller = require('../controllers/bookingController')
 
 
 const user = require('../models/User')
@@ -15,7 +16,7 @@ const path = require('path')
 
 
 //CENTER ROUTER
-router.post('/centers',  catchErrors(Centercontroller.createNewCenter));
+//router.post('/centers',  catchErrors(Centercontroller.createNewCenter));
 router.get('/centers/get',  catchErrors(Centercontroller.getAllCenter));
 router.get('/centers/get/:id',  catchErrors(Centercontroller.getSingleCenter));
 router.delete('/centers/delete/:id',  Centercontroller.deleteSingleCenter)
@@ -57,6 +58,11 @@ router.put('/admin/:id', catchErrors(admincontroller.updateProfile))
 
 //router.post('/upload', userController.uploadImages)
 router.post('/search', userController.searchUser)
+
+//booking route
+router.post('/book', catchErrors(bookingcontroller.bookCenter))
+router.get('/booking', catchErrors(bookingcontroller.getAllBooking))
+router.get('/booking/:id', catchErrors(bookingcontroller.getASingleBooking))
 
 
 //Using cloudinary
@@ -103,5 +109,28 @@ router.put('/centerimage/:id', upload.single('photo'), async(req, res) => {
         })
     }
     
+})
+router.post('/centers', upload.single('photo'), async (req, res) => {
+    const body = req.body;
+  if (!body.name || !body.address || !body.capacity) {
+    res.json({
+      message: `Please fill in the required inputs`
+    });
+  } else if (body.name.length > 35 || body.address.length > 35) {
+    res.json({
+      message: `Name or Address is too long`
+    });
+  } else if(req.file == undefined || req.file == ''){
+    res.json({message:`Error: No file selected`})
+    }
+   else {
+            var image = req.file.path
+            const result = await cloudinary.uploader.upload(image)
+            let imgUrl = result.secure_url
+            const newCenter = await center.create(body)
+            newCenter.photo = imgUrl
+            await newCenter.save()
+      res.json({info:newCenter, message: 'center created successfully'});
+  }
 })
 module.exports = router;

@@ -26,7 +26,8 @@ const centerSchema = new mongoose.Schema({
     light: {type:String, default: 'null'},
     security: {type:String, default: 'null'},
     price: String,
-    photo: String
+    photo: String,
+    paystackurl: String
 },{
     timestamps:true
 });
