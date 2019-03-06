@@ -123,7 +123,7 @@ export default class center extends Component {
                             </button>
                         </div>
                         <div class="modal-body">
-                            <h3>Venue Price: #200,000</h3>
+                            <h3>Venue Price: #{this.state.center.price}</h3>
                             <h3>Date of event</h3>
                         </div>
                         <div class="modal-footer">

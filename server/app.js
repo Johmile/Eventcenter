@@ -28,7 +28,7 @@ const port = 1000;
 app.listen(port, () => {
     //DATABASE CONNECTION
     mongoose.connect('mongodb://localhost/customer')
-    // mongoose.connect('mongodb://johnmax147:sci15csc067@ds125680.mlab.com:25680/customer');
+    
     console.log(`Event center is listening to ${port}`)
 })
 
